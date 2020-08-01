@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+
+<script>
+
+function def(){
+        console.log("click");
+      setInterval(function() {
+        
+        var number = 1 + Math.floor(Math.random() * 100);
+        var number2 = 1 + Math.floor(Math.random() * 100);
+        var number3 = 1 + Math.floor(Math.random() * 20);
+        var number4 = 1 + Math.floor(Math.random() * 20);
+        $('#tempin').text(number);
+        $('#tempout').text(number2);
+        $('#pin').text(number3);
+        $('#pout').text(number4);
+        $(".c100").addClass("p" + number);
+        $(".num").html(number + "%")
+
+        remo(number);
+       
+
+        // $(document).ready(function(){
+        //   $.get("", function(data){
+        //     alert("Data: " + data + "\nStatus: " + status);
+        //   });
+        // });
+        // fetch("https://jsonplaceholder.typicode.com/todos/")
+        // .then(response => response.json())
+        // .then(json => console.log(JSON.stringify(json))
+        // )
+      },
+      4000);
+     
+    }
+    
+    function remo(number){
+        setInterval(function(){
+
+        $(".c100").removeClass("p" + number);
+        console.log(number); 
+
+        },4000)
+    }
+
+def()
+
+</script>
+
+
+
+ <div class="jumbotron text-center" style="background-color:transparent; padding-top:100px;" onload="def()">
+
+
+    <h2> Welcome, System Engineer! </h2>
+
+    <div style="margin-top:70px;">
+
+        <a><button class="btn btn-outline-light px-5 py-4 mb-2">Add New System Set Up  </button></a>
+        <a><button class="btn btn-outline-light px-5 py-4 mb-2">Update System Set Up </button></a>
+
+
+    </div>
+
+ </div>
+
+
+ <div class="container" style="background-color: transparent; margin: auto auto;" onload="def()">
+
+    <div class="row" style="margin: auto auto;">
+        <div class="col-md-4 jumbotron text-center" style="background-color: transparent;">
+            <div style="width: 90%; height: 120%; ">
+
+                <h3> HEAT EXCHANGERS</h3>
+                <div style="margin-top: 30px;">
+                </div>
+                <div class="clearfix">
+
+                    <div class="c100 big">
+                        <span class="num" style="color: black!important;"> 
+                    
+                        </span>
+                        <div class="slice">
+                            <div class="bar"></div>
+                            <div class="fill"></div>
+                        </div>
+                    </div>
+                </div>   
+                
+                <div>
+                    <h4 class="text-info"> 14 Working Good </h4>
+                    <h4 class="text-muted"> 1 Warning </h4>
+                </div>
+
+            </div>
+            
+        </div>
+        <div class="col-md-4 jumbotron text-center" style="background-color: transparent;   ">
+            <div style="width: 90%; height: 120%; margin: auto;">
+                <h3> PUMPS</h3>
+                <div style="margin-top: 30px;">
+                    </div>
+                <div class="clearfix container" >
+
+                    <div class="c100 p10 big">
+                        <span style="color: black!important;">10%</span>
+                        <div class="slice">
+                            <div class="bar"></div>
+                            <div class="fill"></div>
+                        </div>
+                    </div>
+                </div>   
+                
+                <div>
+                    <h4 class="text-info"> 7 Working Good </h4>
+                    <h4 class="text-muted"> 9 Warning </h4>
+                </div>
+
+
+            </div>
+        
+    </div>
+    <div class="col-md-4 jumbotron text-center" style="background-color: transparent;   ">
+        <div style="width: 90%; height: 120%; margin: auto;">
+            <h3> COMPRESSORS </h3>
+            <div style="margin-top: 30px;">
+                </div>
+            <div class="clearfix container" >
+
+                <div class="c100 p80 big">
+                    <span style="color: black!important;">80%</span>
+                    <div class="slice">
+                        <div class="bar"></div>
+                        <div class="fill"></div>
+                    </div>
+                </div>
+            </div>   
+            
+            <div>
+                <h4 class="text-info"> 14 Working Good </h4>
+                <h4 class="text-muted"> 1 Warning </h4>
+            </div>
+
+
+        </div>
+    
+</div>
+<div class="col-md-4 jumbotron text-center" style="background-color: transparent;   ">
+    <div style="width: 90%; height: 120%; margin: auto;">
+        <h3> EXPANDERS</h3>
+        <div style="margin-top: 30px;">
+            </div>
+        <div class="clearfix container" >
+
+            <div class="c100 p30 big">
+                <span style="color: black!important;">30%</span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+        </div>   
+        
+        <div>
+            <h4 class="text-info"> 14 Working Good </h4>
+            <h4 class="text-muted"> 1 Warning </h4>
+        </div>
+
+
+    </div>
+
+</div>     <div class="col-md-4 jumbotron text-center" style="background-color: transparent;   ">
+    <div style="width: 90%; height: 120%; margin: auto;">
+        <h3> REACTING COLUMNS</h3>
+        <div style="margin-top: 30px;">
+            </div>
+        <div class="clearfix container" >
+
+            <div class="c100 p65 big">
+                <span style="color: black!important;">65%</span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+        </div>   
+        
+        <div>
+            <h4 class="text-info"> 14 Working Good </h4>
+            <h4 class="text-muted"> 1 Warning </h4>
+        </div>
+
+
+    </div>
+
+</div>     <div class="col-md-4 jumbotron text-center" style="background-color: transparent;   ">
+    <div style="width: 90%; height: 120%; margin: auto;">
+        <h3> TURBINES</h3>
+        <div style="margin-top: 30px;">
+            </div>
+        <div class="clearfix container" >
+
+            <div class="c100 p40 big">
+                <span style="color: black!important;">40%</span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+        </div>   
+        
+        <div>
+            <h4 class="text-info"> 14 Working Good </h4>
+            <h4 class="text-muted"> 1 Warning </h4>
+        </div>
+
+
+    </div>
+
+</div>     <div class="col-md-4 jumbotron text-center" style="background-color: transparent;   ">
+    <div style="width: 90%; height: 120%; margin: auto;">
+        <h3> STEAM TRAPS</h3>
+        <div style="margin-top: 30px;">
+            </div>
+        <div class="clearfix container" >
+
+            <div class="c100 p40 big">
+                <span style="color: black!important;">40%</span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+        </div>   
+        
+        <div>
+            <h4 class="text-info"> 14 Working Good </h4>
+            <h4 class="text-muted"> 1 Warning </h4>
+        </div>
+
+
+    </div>
+
+</div>     
+<div class="col-md-4 jumbotron text-center" style="background-color: transparent;   ">
+    <div style="width: 90%; height: 120%; margin: auto;">
+        <h3> SAFETY SHOWERS  </h3>
+        <div style="margin-top: 30px;">
+            </div>
+        <div class="clearfix container" >
+
+            <div class="c100 p55
+             big">
+                <span style="color: black!important;">55%</span>
+                <div class="slice">
+                    <div class="bar"></div>
+                    <div class="fill"></div>
+                </div>
+            </div>
+        </div>   
+        
+        <div>
+            <h4 class="text-info"> 14 Working Good </h4>
+            <h4 class="text-muted"> 1 Warning </h4>
+        </div>
+
+
+    </div>
+
+</div>
+    <div class="col-md-4 jumbotron text-center" style="background-color: transparent;   ">
+        <div style="width: 90%; height: 120%; margin: auto;">
+            <h3> MOTORS </h3>
+            <div style="margin-top: 30px;">
+                </div>
+            <div class="clearfix container" >
+
+                <div class="c100 p40 big">
+                    <span style="color: black!important;">40%</span>
+                    <div class="slice">
+                        <div class="bar"></div>
+                        <div class="fill"></div>
+                    </div>
+                </div>
+            </div>   
+            
+            <div>
+                <h4 class="text-info"> 14 Working Good </h4>
+                <h4 class="text-muted"> 1 Warning </h4>
+            </div>
+
+
+        </div>
+    
+</div>
+    
+    </div>
+
+        
+    
+
+{% endblock %}
