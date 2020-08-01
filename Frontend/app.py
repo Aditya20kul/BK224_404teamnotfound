@@ -17,9 +17,25 @@ def hev1():
 def pumpv1():
     return render_template('pump-v1.html')       
 
+@app.route('/dash')
+def dash():
+    return render_template('index-temp.html')
+
+@app.route('/pump')
+def pump():
+    return render_template('pumpindex.html')    
+
 @app.route('/systemsetup')
 def system():
     return render_template('systemadd.html')
+
+@app.route('/userset')
+def user():
+    return render_template('index-temp.html')
+
+@app.route('/charts')
+def chart():
+    return render_template('chartstest.html')
 
 
 if __name__ == "__main__":

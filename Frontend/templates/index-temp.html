@@ -1,0 +1,414 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="/static/dash/css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@3/dark.css">
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+  <!-- <script src='http://code.jquery.com/jquery-latest.js'></script> -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.bundle.js"></script>
+  <script src='static/dash/js/main.js'></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+  <script src="https://cdnjs.com/libraries/Chart.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <script>
+    // Main function to simulate the processing of real time data
+    function def() {
+      // -------------------------------Initializing 1st Chart--------------------------------------
+      var ctx = document.getElementById('temp-chart').getContext('2d');
+      var chart = new Chart(ctx, {
+        // The type of chart we want to create
+        type: 'line',
+        // The data for our dataset
+        data: {
+          labels: ['0', '4', '8', '12', '16', '20'],
+          datasets: [{
+              label: "Efficiency",
+              //backgroundColor: '#30336b',
+              borderColor: '#e67e22',
+              data: [30, 25, 20, 18, 15, 10]
+            }
+          ]
+        },
+        // Configuration options of 1st Chart go here
+        options: {
+          scales: {
+            xAxes: [{
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Lmtd '
+              },
+              ticks: {
+                major: {
+                  fontStyle: 'bold',
+                  fontColor: '#FF0000'
+                }
+              }
+            }],
+            yAxes: [{
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Efficiency'
+              }
+            }]
+          }
+        }
+      });
+      // -------------------------------Initializing 2nd Chart--------------------------------------
+      var ctx1 = document.getElementById('press-chart').getContext('2d');
+      var chart1 = new Chart(ctx1, {
+        // The type of chart we want to create
+        type: 'line',
+        // The data for our dataset
+        data: {
+          labels: ['0', '4', '8', '12', '16', '20'],
+          datasets: [{
+              label: "Predicted Temp-out Hot",
+              //backgroundColor: '#30336b',
+              borderColor: '#16a085',
+              data: [30, 25, 20, 18, 15, 10]
+            },
+            {
+              label: "Predicted Temp-out Cold",
+              //backgroundColor: '#e74c3c',
+              borderColor: '#8e44ad',
+              data: [10, 8, 7, 5, 10, 15]
+            }
+          ]
+        },
+        // Configuration options of 2nd Chart go here
+        options: {
+          scales: {
+            xAxes: [{
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Efficiency'
+              },
+              ticks: {
+                major: {
+                  fontStyle: 'bold',
+                  fontColor: '#FF0000'
+                }
+              }
+            }],
+            yAxes: [{
+              display: true,
+              scaleLabel: {
+                display: true,
+                labelString: 'Predicted Temp-out (Hot & Cold)'
+              }
+            }]
+          }
+        }
+      });
+      function simulate(limit) {
+        var maincnt = 0,
+          accicnt = 0,
+          mcnt = 0,
+          acnt = 0;
+        var i = 0;
+        var eff_ans;
+        var ref = setInterval(() => {
+          const proxyurl = "https://cors-anywhere.herokuapp.com/"; // This url is being used in order to avoid the CORS error
+          const url = "https://sih-utils.herokuapp.com/util" 
+          // Major API that powers the Application, this API returns the data regarding various parameters of Heat Exchanger
+          fetch(proxyurl + url)
+            .then(response => response.json())
+            .then(function (data) {
+              console.log(data);
+              // Manipulating the DOM using the data obtained from API
+              $('#lmtd').html(data.lmtd);
+              $('#area').html(data.area);
+              $('#u').html(data.u);
+              $('#temp-in-hot').html(data.inletTempHot);
+              $('#temp-out-hot-exp').html(data.outletTempHot);
+              $('#temp-in-cold').html(data.inletTempCold);
+              $('#temp-out-cold-exp').html(data.outletTempCold);
+              $('#temp-out-hot-pred').html(data.outletTempHotPred);
+              $('#temp-out-cold-pred').html(data.outletTempColdPred)
+              if (data.randEff == 'EffNormal') {
+                eff_ans = data.EffNormal;
+              } else if (data.randEff == 'EffMaintenance') {
+                mcnt++;
+                eff_ans = data.EffMaintenance;
+              } else {
+                acnt++;
+                eff_ans = data.EffAccidental
+              }
+              $('#efficiency').html(eff_ans);
+              $('#maint-cnt').html('Maintenance Alert ( count ) - ' + mcnt);
+              $('#acci-cnt').html('Accidental Alert ( count ) - ' + acnt);
+              var oldData = chart.data.datasets[0].data;
+              oldLabels = chart.data.labels;
+              oldLabels.push(data.lmtd);
+              oldData.push(eff_ans);
+              //console.log(chart.data.datasets[0].data);
+              // var oldDataOutletTemp = chart.data.datasets[1].data;
+              // oldDataOutletTemp.push(lmtd)
+              // console.log(chart.data.datasets[1].data);
+              chart.data.datasets[0].data.shift();
+              //chart.data.datasets[1].data.shift();
+              chart.data.labels.shift();
+              chart.update();
+ //------------------------------------ Updating the Chart-2 below ---------------------------------------
+              var oldDataInletPress = chart1.data.datasets[0].data;
+              oldLabelsPress = chart1.data.labels;
+              oldLabelsPress.push(eff_ans);
+              oldDataInletPress.push(data.outletTempHotPred);
+              //console.log(chart1.data.datasets[0].data);
+
+              var oldDataOutletPress = chart1.data.datasets[1].data;
+              oldDataOutletPress.push(data.outletTempColdPred)
+              //console.log(chart1.data.datasets[1].data);
+
+              chart1.data.datasets[0].data.shift();
+              chart1.data.datasets[1].data.shift();
+
+              chart1.data.labels.shift();
+              chart1.update();
+              console.log("randEff - " + data.randEff);
+              if (data.randEff == "EffMaintenance") {
+                $(".eff").css({
+                  "background-color": '#f39c12',
+                  "transition": "width 2s",
+                  "-webkit-transition": "background-color 1500ms linear"
+                });
+                maincnt++;
+                accicnt = 0;
+              } else if (data.randEff == "EffAccidental") {
+                $(".eff").css({
+                  "background-color": '#e74c3c',
+                  "transition": "width 2s",
+                  "-webkit-transition": "background-color 1500ms linear"
+                });
+                accicnt++;
+                maincnt = 0;
+              } else {
+                $(".eff").css({
+                  "background-color": '#2ecc71',
+                  "transition": "width 2s",
+                  "-webkit-transition": "background-color 1500ms linear"
+                });
+                maincnt = 0;
+                accicnt = 0;
+              }
+              if (maincnt >= 3){
+                //alert("Received Maintenance error 3 times in a row\nMaintenance Alert !");
+                Swal.fire({
+                  title: 'Maintenance Alert !',
+                  text: 'Maintenance Alert occurred 3 times in a row\n Stopping simulation !',
+                  icon: 'warning',
+                  confirmButtonText: 'OK'
+                })
+                console.log("Simulation Stopped");
+                clearInterval(ref);
+              }
+              if (accicnt >= 3) {
+                //alert("Received Accidental error 3 times in row\nAccidental Alert !");
+                Swal.fire({
+                  title: 'Accidental Alert !',
+                  text: 'Accidental Alert occurred 3 times in a row\n Stopping simulation !',
+                  icon: 'warning',
+                  confirmButtonText: 'OK'
+                })
+                console.log("Simulation Stopped");
+                clearInterval(ref);
+              }
+              console.log("maincnt= " + maincnt);
+              console.log("accicnt= " + accicnt);
+            });
+          i++;
+          if (i == limit) {
+            clearInterval(ref);
+          }
+        }, 6000);
+      }
+      simulate(350);
+    }
+  </script>
+  <style>
+  </style>
+</head>
+
+<body>
+  <aside class="side-nav" id="show-side-navigation1">
+    <i class="fa fa-bars close-aside hidden-sm hidden-md hidden-lg" data-close="show-side-navigation1"></i>
+    <div class="heading">
+      <div class="info" style="padding-top:20px;">
+        <h4><a href="#">404TeamNotFound</a></h4>
+        <p>Solution for SIH</p>
+      </div>
+    </div>
+    <div class="search">
+    </div>
+    <ul class="categories">
+      <li><i class="" aria-hidden="true"></i><a href="#"> All Devices </a>
+        <ul class="side-nav-dropdown">
+          <li><a href="/userset">Heat Exchangers</a></li>
+          <li><a href="/pump">Pumps </a></li>
+        </ul>
+      </li>
+      <li><i class=""></i><a href="#"> Alerts / Notifications </a>
+        <!-- <ul class="side-nav-dropdown">
+            
+          </ul> -->
+      </li>
+  </aside>
+  <section id="contents">
+    <div class="welcome">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="content">
+              <h2>Heat Exchanger Simulation</h2>
+              <button class="btn btn-success" onclick="def()">Start Simulation !</button>
+              <!-- <a href="/cost-he"><button class="btn btn-primary ml-3" id="btn-cost">Costing</button></a> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="statistics">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6">
+            <!-- <i class="fa fa-envelope fa-fw bg-primary"></i> -->
+            <div class="info text-center jumbotron"
+              style="width: 100%; background-color:#313348; color: white; height: 100px; padding:5px">
+              <h4> TEMP-IN (HOT) </h4>
+              <h2 id="temp-in-hot"> 0 </h2>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <!-- <i class="fa fa-envelope fa-fw bg-primary"></i> -->
+            <div class="info text-center jumbotron"
+              style="width: 100%; background-color: #313348; color:white;height: 100px; padding:5px">
+              <h4> TEMP-IN (COLD) </h4>
+              <h2 id="temp-in-cold"> 0 </h2>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <!-- <i class="fa fa-envelope fa-fw bg-primary"></i> -->
+            <div class="info text-center jumbotron"
+              style="width: 100%; background-color:#313348; color: white;height: 100px; padding:5px">
+              <h4>Expected TEMP-OUT (HOT) </h4>
+              <h2 id="temp-out-hot-exp"> 0 </h2>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <!-- <i class="fa fa-envelope fa-fw bg-primary"></i> -->
+            <div class="info text-center jumbotron"
+              style="width: 100%; background-color:#313348; color: white; height: 100px; padding:5px">
+              <h4>Predicted TEMP-OUT (HOT) </h4>
+              <h2 id="temp-out-hot-pred"> 0 </h2>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <!-- <i class="fa fa-envelope fa-fw bg-primary"></i> -->
+            <div class="info text-center jumbotron"
+              style="width: 100%; background-color:#313348; color: white; height: 100px; padding:5px">
+              <h4>Expected TEMP-OUT (COLD) </h4>
+              <h2 id="temp-out-cold-exp"> 0 </h2>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <!-- <i class="fa fa-envelope fa-fw bg-primary"></i> -->
+            <div class="info text-center jumbotron"
+              style="width: 100%; background-color:#313348; color: white; height: 100px; padding:5px">
+              <h4>Predicted TEMP-OUT (COLD) </h4>
+              <h2 id="temp-out-cold-pred"> 0 </h2>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <!-- <i class="fa fa-envelope fa-fw bg-primary"></i> -->
+            <div class="info text-center jumbotron"
+              style="width: 100%; background-color:#313348; color: white; height: 100px; padding:5px">
+              <h4>LMTD</h4>
+              <h2 id="lmtd"> 0 </h2>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <!-- <i class="fa fa-envelope fa-fw bg-primary"></i> -->
+            <div class="info text-center jumbotron"
+              style="width: 100%; background-color:#313348; color: white; height: 100px; padding:5px">
+              <h4>AREA</h4>
+              <h2 id="area"> 0 </h2>
+            </div>
+          </div>
+          <div class="col-md-2">
+            <!-- <i class="fa fa-envelope fa-fw bg-primary"></i> -->
+            <div class="info text-center jumbotron"
+              style="width: 100%; background-color:#313348; color: white; height: 100px; padding:5px">
+              <h4>U</h4>
+              <h2 id="u"> 0 </h2>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <!-- <i class="fa fa-envelope fa-fw bg-primary"></i> -->
+            <div class="info text-center jumbotron eff"
+              style="width: 100%; background-color:#313348; color: white; height: 100px; padding:5px">
+              <h4>Efficiency</h4>
+              <h2 id="efficiency"> 0 </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="charts">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="chart-container">
+              <h4>(Efficiency V/s LMTD )</h4>
+              <canvas id="temp-chart"></canvas>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="chart-container">
+              <h4>(Predicted Temp-out Hot & Predicted Temp-out Cold) vs Efficiency </h4>
+              <canvas id="press-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="admins">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="">
+              <h3 style="color: white;">Devices -</h4>
+                <div class="admin">
+                  <div class="img">
+                    <!-- <img class="img-responsive" src="https://uniim1.shutterfly.com/ng/services/mediarender/THISLIFE/021036514417/media/23148906966/small/1501685402/enhance" alt="admin"> -->
+                  </div>
+                  <div class="info jumbotron" style="padding:30px; margin-bottom: 20px; background-color:#313348">
+                    <h2 style="color: white;">Heat Exchangers</h2>
+                    <p>
+                      <span id="maint-cnt" style="color: rgb(233, 115, 18);"> </span><br>
+                      <span id="acci-cnt" style="color: rgb(255, 38, 0);"> </span><br>
+                  </div>
+
+                </div>
+                
+                
+            </div>
+          </div>
+    </section>
+</body>
+
+</html>
