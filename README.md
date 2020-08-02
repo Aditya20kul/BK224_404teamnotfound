@@ -20,6 +20,7 @@ Official repository for SIH Problem Statement
 
 # Machine Learning Model 
 ## Artificial Neural Network Architecture 
+
 <table>
 	<th>Layer (type)</th>
 	<th>Output Shape</th>              
@@ -46,5 +47,7 @@ Official repository for SIH Problem Statement
 	<td>dense_76 (Dense)</td>             <td>(None, 1)</td>                 <td>33</td>  
 	</tr>
 </table>
+
+
 ## Epoch vs Loss Graph 
 <img src='Machine_Learning_and_Data/ANN2.0/loss.png'>
