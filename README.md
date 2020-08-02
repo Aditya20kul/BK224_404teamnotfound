@@ -17,4 +17,26 @@ Official repository for SIH Problem Statement
 <br><br>
 --> To check out the working of the Application - <a href="https://sih-webapp.herokuapp.com/userset">Demo</a>
 <br><br>--> API endpoint for Heat Exchanger - <a href="https://sih-utils.herokuapp.com/util">API</a>
+
+# Machine Learning Model 
+## Artificial Neural Network Architecture 
+
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense_70 (Dense)             (None, 512)               3584      
+_________________________________________________________________
+dense_71 (Dense)             (None, 256)               131328    
+_________________________________________________________________
+dense_72 (Dense)             (None, 128)               32896     
+_________________________________________________________________
+dense_73 (Dense)             (None, 64)                8256      
+_________________________________________________________________
+dense_74 (Dense)             (None, 64)                4160      
+_________________________________________________________________
+dense_75 (Dense)             (None, 32)                2080      
+_________________________________________________________________
+dense_76 (Dense)             (None, 1)                 33        
+=================================================================
+
+## Epoch vs Loss Graph 
 <img src='Machine_Learning_and_Data/ANN2.0/loss.png'>
