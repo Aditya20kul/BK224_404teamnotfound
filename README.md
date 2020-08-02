@@ -20,22 +20,31 @@ Official repository for SIH Problem Statement
 
 # Machine Learning Model 
 ## Artificial Neural Network Architecture 
-
-Layer (type)                 Output Shape              Param   
-=================================================================
-dense_70 (Dense)             (None, 512)               3584      
-_________________________________________________________________
-dense_71 (Dense)             (None, 256)               131328    
-_________________________________________________________________
-dense_72 (Dense)             (None, 128)               32896     
-_________________________________________________________________
-dense_73 (Dense)             (None, 64)                8256      
-_________________________________________________________________
-dense_74 (Dense)             (None, 64)                4160      
-_________________________________________________________________
-dense_75 (Dense)             (None, 32)                2080      
-_________________________________________________________________
-dense_76 (Dense)             (None, 1)                 33        
-
+<table>
+	<th>Layer (type)</th>
+	<th>Output Shape</th>              
+	<th>Param</th>   
+	<tr>
+	<td>dense_70 (Dense)</td>	<td> (None, 512)</td>               <td>3584 </td>     
+	</tr>
+	<tr>
+	<td>dense_71 (Dense)</td>             <td>(None, 256)</td>               <td>131328</td>  
+	</tr>	
+	<tr>
+	<td>dense_72 (Dense)</td>             <td>(None, 128)</td>               <td>32896</td> 
+	</tr>	
+	<tr>
+	<td>dense_73 (Dense)</td>             <td>(None, 64)</td>                <td>8256 </td>     
+	</tr>
+	<tr>
+	<td>dense_74 (Dense)</td>             <td>(None, 64)</td>               <td> 4160</td>      
+	</tr>
+	<tr>
+	<td>dense_75 (Dense)</td>             <td>(None, 32)</td>                <td>2080</td>      
+	</tr>
+	<tr>
+	<td>dense_76 (Dense)</td>             <td>(None, 1)</td>                 <td>33</td>  
+	</tr>
+</table>
 ## Epoch vs Loss Graph 
 <img src='Machine_Learning_and_Data/ANN2.0/loss.png'>
