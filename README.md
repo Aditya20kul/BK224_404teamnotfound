@@ -21,7 +21,7 @@ Official repository for SIH Problem Statement
 # Machine Learning Model 
 ## Artificial Neural Network Architecture 
 
-Layer (type)                 Output Shape              Param #   
+Layer (type)                 Output Shape              Param   
 =================================================================
 dense_70 (Dense)             (None, 512)               3584      
 _________________________________________________________________
@@ -36,7 +36,6 @@ _________________________________________________________________
 dense_75 (Dense)             (None, 32)                2080      
 _________________________________________________________________
 dense_76 (Dense)             (None, 1)                 33        
-=================================================================
 
 ## Epoch vs Loss Graph 
 <img src='Machine_Learning_and_Data/ANN2.0/loss.png'>
