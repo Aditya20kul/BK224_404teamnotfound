@@ -22,6 +22,7 @@
   <script src="https://cdnjs.com/libraries/Chart.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <script src="https://smtpjs.com/v3/smtp.js"></script>
   <script>
     // Main function to simulate the processing of real time data
     function def() {
@@ -115,6 +116,20 @@
           }
         }
       });
+      function sendMail(cont){
+        Email.send({
+                  Host : "smtp.elasticemail.com",
+                  Username : "adicool2099@gmail.com",
+                  Password : "1DFB565CEF050E2DA614A2C83518F690452E",
+                  To : 'kulkarniaditya2099@gmail.com',
+                  From : "adicool2099@gmail.com",
+                  Subject : "ALert !",
+                  Body : cont
+                  }).then(
+                    message => alert(message)
+                  );
+      }
+
       function simulate(limit) {
         var maincnt = 0,
           accicnt = 0,
@@ -124,7 +139,7 @@
         var eff_ans;
         var ref = setInterval(() => {
           const proxyurl = "https://cors-anywhere.herokuapp.com/"; // This url is being used in order to avoid the CORS error
-          const url = "https://sih-utils.herokuapp.com/util" 
+          const url = "https://sih-utils.herokuapp.com/he" 
           // Major API that powers the Application, this API returns the data regarding various parameters of Heat Exchanger
           fetch(proxyurl + url)
             .then(response => response.json())
@@ -141,21 +156,20 @@
               $('#temp-out-hot-pred').html(data.outletTempHotPred);
               $('#temp-out-cold-pred').html(data.outletTempColdPred)
               if (data.randEff == 'EffNormal') {
-                eff_ans = data.EffNormal;
+                //eff_ans = data.EffNormal;
               } else if (data.randEff == 'EffMaintenance') {
                 mcnt++;
-                eff_ans = data.EffMaintenance;
+                //eff_ans = data.EffMaintenance;
               } else {
                 acnt++;
-                eff_ans = data.EffAccidental
               }
-              $('#efficiency').html(eff_ans);
+              $('#efficiency').html(data.efficiency);
               $('#maint-cnt').html('Maintenance Alert ( count ) - ' + mcnt);
               $('#acci-cnt').html('Accidental Alert ( count ) - ' + acnt);
               var oldData = chart.data.datasets[0].data;
               oldLabels = chart.data.labels;
               oldLabels.push(data.lmtd);
-              oldData.push(eff_ans);
+              oldData.push(data.efficiency);
               //console.log(chart.data.datasets[0].data);
               // var oldDataOutletTemp = chart.data.datasets[1].data;
               // oldDataOutletTemp.push(lmtd)
@@ -167,7 +181,7 @@
  //------------------------------------ Updating the Chart-2 below ---------------------------------------
               var oldDataInletPress = chart1.data.datasets[0].data;
               oldLabelsPress = chart1.data.labels;
-              oldLabelsPress.push(eff_ans);
+              oldLabelsPress.push(data.efficiency);
               oldDataInletPress.push(data.outletTempHotPred);
               //console.log(chart1.data.datasets[0].data);
 
@@ -215,6 +229,8 @@
                   confirmButtonText: 'OK'
                 })
                 console.log("Simulation Stopped");
+                msg = "<b>Maintenance Alert !</b>\n <h1>Check the Equipment ASAP\n Current Efficiency - "+data.efficiency+"</h1>";
+                sendMail(msg); 
                 clearInterval(ref);
               }
               if (accicnt >= 3) {
@@ -226,7 +242,9 @@
                   confirmButtonText: 'OK'
                 })
                 console.log("Simulation Stopped");
-                clearInterval(ref);
+                msg = "<b>Accidental Alert !</b>\n <h1>Check the Equipment ASAP\n Current Efficiency - "+data.efficiency+"</h1>";
+                sendMail(msg);  
+                clearInterval(ref); 
               }
               console.log("maincnt= " + maincnt);
               console.log("accicnt= " + accicnt);
@@ -235,8 +253,8 @@
           if (i == limit) {
             clearInterval(ref);
           }
-        }, 6000);
-      }
+        }, 10000);
+      } 
       simulate(350);
     }
   </script>

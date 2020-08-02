@@ -1,11 +1,13 @@
 from flask import Flask, render_template
 from flask import jsonify
 from flask import request
+from keras.models import load_model
 import pickle
 import sklearn
 import numpy as np
 import random
 from collections import OrderedDict
+import json
 
 app = Flask(__name__) 
 np.warnings.filterwarnings('ignore', category=np.VisibleDeprecationWarning)
@@ -51,10 +53,7 @@ def pump():
 ###########################################################################
 @app.route('/util', methods=['GET', 'POST'])
 def util():
-    #U: In kJ
-    #A: 21.2 m^2 (compressed 10 times for faster calculation as it's constant it won't affect efficiency)
-    #Q: (compressed 100 times for quick response)
-    
+
     lmtd = round(random.uniform(6.028, 79.965), 3)
     u = round(random.uniform(0.151, 0.197), 3)
     inletTempHot = round(random.uniform(80, 124), 3)
@@ -119,6 +118,60 @@ def util():
         "outletTempColdPred":round(tempCold,3),
     }
     return parameters
+
+#########################################################
+@app.route('/he', methods=['GET', 'POST'])
+def he():
+
+    lmtd = round(random.uniform(208.49, 249.73), 3)
+    u = round(random.uniform(0.344, 0.908), 3)
+    inletTempHot = round(random.randint(340, 360), 3)
+    outletTempHot = round(random.randint(220, 245), 3)
+    inletTempCold = round(random.randint(30, 45), 3)
+    outletTempCold = round(random.randint(70,95), 3)
+    area = 21.12
+    qIdeal = round((u * area * lmtd), 3)
+    rand1 = round(random.uniform(0.15, 0.92), 3)
+    qaNormal = round((rand1*qIdeal), 3)
+
+    model  = load_model('ML-models/ANN-version-3.h5',compile=False)
+    
+    ar = [[inletTempHot, inletTempCold, outletTempHot, outletTempCold, u, lmtd, qaNormal, qIdeal]]
+    efficiency = model.predict(ar)
+    efficiency = round(efficiency[0][0], 3)
+    print(efficiency)
+    if efficiency<30:
+        randEff = 'EffAccidental'
+    elif efficiency>=30 and efficiency<=60:
+        randEff = 'EffMaintenance'
+    else:
+        randEff = 'EffNormal'  
+
+    model1  = load_model('ML-models/Temp_heat_out.h5',compile=False)  
+    ar = [[inletTempHot, inletTempCold, u, lmtd, qaNormal, qIdeal]]  
+    outletTempHotPred = model1.predict(ar)
+    outletTempHotPred = round(outletTempHotPred[0][0], 3)
+
+    model2  = load_model('ML-models/Temp_cold_out.h5',compile=False)  
+    ar = [[inletTempHot, inletTempCold, u, lmtd, qaNormal, qIdeal]]  
+    outletTempColdPred = model2.predict(ar)
+    outletTempColdPred = round(outletTempColdPred[0][0], 3)
+    parameters = {
+        "area":str(21.12),
+        "lmtd": str(lmtd),
+        "u": str(u),
+        "qIdeal": str(qIdeal),
+        "qaNormal": str(qaNormal),
+        "efficiency": str(efficiency),
+        "randEff": str(randEff),
+        "inletTempHot": str(inletTempHot),
+        "inletTempCold": str(inletTempCold),
+        "outletTempHot": str(outletTempHot),
+        "outletTempCold": str(outletTempCold),
+        "outletTempHotPred": str(outletTempHotPred),
+        "outletTempColdPred":str(outletTempColdPred)
+    }
+    return parameters  
 
 if __name__ == '__main__': 
     app.run()    
