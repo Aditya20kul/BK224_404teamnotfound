@@ -17,3 +17,4 @@ Official repository for SIH Problem Statement
 <br><br>
 --> To check out the working of the Application - <a href="https://sih-webapp.herokuapp.com/userset">Demo</a>
 <br><br>--> API endpoint for Heat Exchanger - <a href="https://sih-utils.herokuapp.com/util">API</a>
+<img src='Machine_Learning_and_Data/ANN2.0/loss.png'>
